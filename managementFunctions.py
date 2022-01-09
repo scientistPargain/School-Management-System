@@ -25,7 +25,7 @@ def connectSQL(*pswrd):
         print(e)
 
 def sqlHeader():
-    cursor,mycon = connectSQL('pass')
+    cursor,mycon = connectSQL('paass')
     cursor.execute('select * from students')
     #cursor.desription is a NoneType value without executing a sql command before it 
     header = [i[0] for i in cursor.description] #list of fields at header

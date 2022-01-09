@@ -174,7 +174,7 @@ while True:
                     print('Deleting record...')
                     deleteRec(id)
 
-            userInp=input('Do u want to delete more records? (y/n): ')
+            userInp=input('Do u want to delete more records? (y/n) : ')
 
     elif userInp==4:  # modify data
         #Also enter the last modified date in this section
