@@ -125,7 +125,7 @@ def addStu(*paswrd):
         mycon.close()
 
 #Learn use of overload decorator
-# @overload
+@overload(int)
 def deleteRec(id:int ):
     '''
     To delete data of any student 
@@ -137,16 +137,19 @@ def deleteRec(id:int ):
     print(f'{affctedRow} record deleted for id {id}')
     mycon.close()
 
-# @overload
-# def deleteRec(id:tuple):
-#     cursor,mycon=connectSQL('anython')
-#     affctedRow=cursor.execute(f"delete from students where id in {id}")
-#     mycon.commit()
-#     print(f"{affctedRow} records deleted")
-#     mycon.close()
+@overload(tuple)
+def deleteRec(id:tuple):
+    '''Delete every id in that tuple that found in db'''
+    #If entering tuple, enter more than 1 element
 
+    cursor,mycon=connectSQL('anython')
+    affctedRow=cursor.execute(f"delete from students where id in {id}")
+    mycon.commit()
+    print(f"{affctedRow} records deleted")  #find a way to know which id is not deleted or found in the database from given tuple
+    mycon.close()
 
-def srchById(srchId):
+@overload(int)
+def srchById(srchId:int):
     '''
     Returns data(tuple) of searched id
     and returns empty tuple if notihing matching found in database
@@ -154,6 +157,22 @@ def srchById(srchId):
 
     cursor,mycon = connectSQL('select * from students')
     cursor.execute(f'select * from students where id={srchId};')
+    data = cursor.fetchall()
+    if data==() or data==[]:  #checks if data is a empty list or not ---bcoz whenever nothing will be found in database, it will return empty tuple or list.
+        print('No matching id found as ',srchId)
+    mycon.close()
+    return data
+
+@overload(tuple)
+def srchById(srchId:tuple):
+    '''
+    Returns data(tuple) of searched ids
+    and returns empty tuple if notihing matching found in database
+    '''
+
+    cursor,mycon = connectSQL('select * from students')
+    cursor.execute(f'select * from students where id in{srchId};')
+    print(f'select * from students where id in{srchId};')
     data = cursor.fetchall()
     if data==() or data==[]:  #checks if data is a empty list or not ---bcoz whenever nothing will be found in database, it will return empty tuple or list.
         print('No matching id found as ',srchId)
