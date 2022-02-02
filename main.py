@@ -178,14 +178,67 @@ while True:
 
     elif userInp==4:  # modify data
         #Also enter the last modified date in this section
-        inpId=int(input('Enter id whose record u want to update: '))
-        data=srchById(inpId)
-        if data!=():
-            for row in data:
-                print(row)
-                
-        modify()
+        ckMore='y'
+        while ckMore=='y':  #repeatng if user wants to modify another record
+            inpId=int(input('Enter id whose record u want to update: '))
+            data=srchById(inpId)
+            if data!=():
+                for row in data:
+                    print(row)
 
+
+            entrAgain='y' #element to re-run this while at the same time on user's demand.
+            while entrAgain=='y':  #repeting if user demand to modify something else
+                while 1:  #repeating if user enters wrong options
+                    print('WHat you would like to modify of this record.')
+                    print("[1] To modify Name")
+                    print("[2] To modify Class")
+                    print("[3] To modify Email")
+                    print("[4] To modify Father's Name")
+                    print("[5] To modify Mother's Name")
+                    print("[0] to go back")
+                    print("[99] to exit here")
+                    print('Or you can modify multiple things at a time . i.e [23] will modify class[2] and Email[3]\n or [123] will modify name[1], class[2] and email[3] ')
+
+                    userInp = int(input("What do you want to modify: "))
+                    if ("0" or "1" or "2" or "3" or "4" or "5" or "99"  in str(userInp)) and (userInp>=0 and userInp<=543210 ):
+                        break
+                    else:
+                        print('Enter valid option!!')
+                        print()
+                        print("Options should be greater than 0 and less than 543210\n-> if you are trying to exit at the same time then exit in next turn without any another option.")
+
+
+                if userInp==99:
+                    programOver()
+                if ('0' or '1' or '2' or '3' or '4' or '5' in str(userInp)) :
+                    userInps=list(str(userInp))
+                    print(userInps)
+                    for userInp in userInps:
+                        if userInp=="0":
+                            break
+                        elif userInp=="1":
+                            modifyName(inpId)
+                        elif userInp=="2":
+                            modifyClass(inpId)
+                        elif userInp=="3":
+                            modifyEmail(inpId)
+                        elif userInp=="4":
+                            modifyFname(inpId)
+                        elif userInp=="5":
+                            modifyMname(inpId)
+                        elif userInp=="99":
+                            programOver()
+                else:
+                    print('Enter valid options!!') 
+
+                entrAgain=input('DO you want to modify something else?(y/n) :').lower()
+                if entrAgain!='y':
+                    entrAgain='n'  #So that the program can terminate after this
+                
+
+            ckMore=input('Do you want to modify another record?(y/n) : ').lower()  #Asking user if he/she wants to modify another record
+        
     elif userInp==5:  # for help module
         help()
 

@@ -33,6 +33,8 @@ def sqlHeader():
     mycon.close()
     return header
 
+# Addition functions
+
 def addStu(*paswrd):
     '''
     To insert data of new student into database
@@ -124,6 +126,7 @@ def addStu(*paswrd):
     finally:
         mycon.close()
 
+# Deletion functions
 #Learn use of overload decorator
 @overload(int)
 def deleteRec(id:int ):
@@ -148,6 +151,7 @@ def deleteRec(id:tuple):
     print(f"{affctedRow} records deleted")  #find a way to know which id is not deleted or found in the database from given tuple
     mycon.close()
 
+# Search Functions
 @overload(int)
 def srchById(srchId:int):
     '''
@@ -235,15 +239,95 @@ def srchByEmail(srchEmail):
     return data
 
 
+# Modify Functions
+def modifyName(id:int):
+    data=srchById(id)
+    for row in data:
+        print(row)
+        print(f"Currently name is {row[1]}.")
 
-def modify():
-    '''
-    To update data of students
-    (require admin's permission)'''
-    pass
+    name = input("New Name : ").strip()
+    cursor,mycon = connectSQL()
+    cursor.execute(f"Update students set name='{name}' where id = {id};")
+    mycon.commit()
+    print(f'Record updated!! \nSuccesfully modified name to {name}.')
+    mycon.close()
+
+def modifyClass(id:int):
+    # Try to auto increment this after 1 year through python if user passes and delete if user fails.
+    data=srchById(id)
+    for row in data:
+        print(row)
+        print(f'Currently {row[1]} is in class {row[3]}.')
+
+    while True:
+        cls = int(input("Enter new class: "))
+        if (cls>=6 and cls <=12):
+            cursor,mycon = connectSQL()
+            cursor.execute(f"Update students set Class={cls} where id = {id};")
+            mycon.commit()
+            mycon.close()
+            print(f'Record updated!! \nNew class set to {cls}')
+            break
+        else:
+            print('Enter a valid class b/w 6 to 12')
+            print()
+            continue
+        
+
+def modifyEmail(id:int):
+    data=srchById(id)
+    for row in data:
+        print(row)
+        print(f"Currently email of {row[1]} is {row[7]}.")
+
+    while True:
+        email = input("Enter new email: ").strip()
+        if ('@' in email) and (len(email.split())==1):
+            cursor,mycon = connectSQL()
+            cursor.execute(f"Update students set email='{email}' where id = {id};")
+            mycon.commit()
+            mycon.close()
+            print(f"Record succesfully updated!! \nNew email set as {email}")
+            break
+        else:
+            print('Invalid email')
+            print('\nCheck if you have written correct email with "@" symbol ')
+            print('Check if there is any space in email written by you.')
+            print()
+            break
+        
 
 
 
+def modifyFname(id:int):
+    data=srchById(id)
+    for row in data:
+        print(row)
+        print(f"Currently Father's name of {row[1]} is {row[8]}.")
+
+    Fname = input("Enter Father's name to modify: ").strip()
+    cursor,mycon = connectSQL()
+    cursor.execute(f"Update students set Father_name='{Fname}' where id = {id};")
+    mycon.commit()
+    print(f"Record updated!! \nSuccesfully modified Father's name to {Fname}.")
+    mycon.close()
+
+def modifyMname(id:int):
+    data=srchById(id)
+    for row in data:
+        print(row)
+        print(f"Currently Mother's name of {row[1]} is {row[9]}.")
+
+    Mname = input("Enter Mother's name to modify: ").strip()
+    cursor,mycon = connectSQL()
+    cursor.execute(f"Update students set Mother_name='{Mname}' where id = {id};")
+    mycon.commit()
+    print(f"Record updated!! \nSuccesfully modified Mother's name to {Mname}.")
+    mycon.close()
+
+
+# Help functions
 def help():
     '''
     Prints help
