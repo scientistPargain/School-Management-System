@@ -1,13 +1,13 @@
 from managementFunctions import *
 
 while True:
-    print("School Management System")
+    print("\nSchool Management System")
     help()
 
     userInp = int(input('Your choice: '))
 
     if userInp==1:  # Display students or their data
-        print('How do you want to display record: ')
+        print('\nHow do you want to display record: ')
         print('[1] by id')  # using letter of first word is more convinient i.e id - [i]
         print('[2] by name')
         print('[3] by house')
@@ -20,7 +20,7 @@ while True:
         print('[0] to go back')
         print('[99] to exit here')
         while True: 
-            disInp = int(input('enter your choice: '))
+            disInp = int(input('\nenter your choice: '))
             if disInp==0: # stop here or go back
                 print('Funcitons will stop here')
                 break
@@ -29,30 +29,31 @@ while True:
 
                 userInp='y'
                 while userInp=='y':
-                    srchId = int(input('ENter id: '))  # restriction can be applied here to id
+                    srchId = int(input('\nENter id: '))  # restriction can be applied here to id
                     data = srchById(srchId)
                     if data!=():
-                        print(sqlHeader())
-                        for row in data:
-                            print(row)
-                    userInp=input('DO u want to check another one? (y/n): ')
+                        # print(sqlHeader())
+                        # for row in data:
+                        #     print(row)
+                        printTabular(data,sqlHeader())
+                    userInp=input('\nDO u want to check another one? (y/n): ')
 
             elif disInp==2: # by name
                 userInp='y'
                 while userInp=='y':
-                    srchName = (input('ENter name: ')) # upper or lower case can matter.. change the whole to one case
+                    srchName = (input('\nEnter name: ')) # upper or lower case can matter.. change the whole to one case
                     
                     data=srchByName(srchName)
                     if data!=():
-                        print('THis is running')
-                        print(sqlHeader())
-                        for row in data:
-                            print(row)
-                    userInp=input('DO u want to check another one? (y/n): ')
+                        # print(sqlHeader())
+                        # for row in data:
+                        #     print(row)
+                        printTabular(data,sqlHeader())
+                    userInp=input('\nDo u want to check another one? (y/n): ')
 
             elif disInp==3:  # by house
                 HouseDict={'B':'BLUE','R':'RED','G':'GREEN','Y':'YELLOW','':''}
-                print('Enter house:      for example \n\
+                print('\nEnter house:      for example \n\
                     B - Blue (Nanda) House \n\
                     R - Red (Corbett) House \n\
                     G - Green (Gangotri) House \n\
@@ -61,18 +62,19 @@ while True:
 
                 userInp='y'
                 while userInp=='y':
-                    srchHouse = input('House: ').upper()
+                    srchHouse = input('\nHouse: ').upper()
                     while srchHouse not in('R','B','G','Y'):
                         print('Enter valid house')
-                        srchHouse = input('House: ').upper()
+                        srchHouse = input('\nHouse: ').upper()
 
                     srchHouse=HouseDict[srchHouse]
                     data= srchByHouse(srchHouse)
                     if data!=():
-                        print(sqlHeader())
-                        for row in data:
-                            print(row)
-                    userInp=input('Do you wnat to check another one? (y/n): ')
+                        # print(sqlHeader())
+                        # for row in data:
+                        #     print(row)
+                        printTabular(data,sqlHeader())
+                    userInp=input('\nDo you wnat to check another one? (y/n): ')
                         
             # elif disInp==4:  # match phone number
                 # phone= 0000000000   # 10 igits phone number
@@ -84,32 +86,34 @@ while True:
             elif disInp==4:  # by Aadhar no
                 userInp='y'
                 while userInp=='y':
-                    srchAadhar = input('ENter Aadhar card no: ') # restriction can be applied here to aadhar no i.e 12 digits
+                    srchAadhar = input('\nEnter Aadhar card no: ') # restriction can be applied here to aadhar no i.e 12 digits
                     while(len(srchAadhar)!=12 or  srchAadhar.isnumeric()==False):
                         print('Enter a valid Aadhar card no. !!')
-                        srchAadhar = input('ENter Aadhar card no: ')
+                        srchAadhar = input('\nEnter Aadhar card no: ')
                     
                     data=srchByAadhar(srchAadhar)
                     if data!=():
-                        print(sqlHeader())
-                        for row in data:
-                            print(row)
-                    userInp=input('DO u want to check another one? (y/n): ')
+                        # print(sqlHeader())
+                        # for row in data:
+                        #     print(row)
+                        printTabular(data,sqlHeader())
+                    userInp=input('\nDo u want to check another one? (y/n): ')
 
             elif disInp==5:  # by Email
                 userInp='y'
                 while userInp=='y':
-                    srchEmail = input('ENter Email: ') 
+                    srchEmail = input('\nEnter Email: ') 
                     while (len(srchEmail.strip().split())!=1):
                         print('Enter only one and valid email !! try again')
-                        srchEmail = input('ENter Email: ')
+                        srchEmail = input('\nEnter Email: ')
 
                     data=srchByEmail(srchEmail)
                     if data!=():
-                        print(sqlHeader())
-                        for row in data:
-                            print(row)
-                    userInp=input('DO u want to check another one? (y/n): ')     
+                        # print(sqlHeader())
+                        # for row in data:
+                        #     print(row)
+                        printTabular(data,sqlHeader())
+                    userInp=input('\nDo u want to check another one? (y/n): ')     
 
             # elif disInp==6:  # by father's name
                 # Father_name = input("Enter father's name of student (without Mr.) :" ).upper()
@@ -127,14 +131,13 @@ while True:
                 cursor,mycon = connectSQL(sqlcommand)
                 rowsAffected = cursor.execute('SELECT * FROM students')  #cursor object returns no. of rows affected
 
-                print(sqlHeader())
-
                 data = cursor.fetchall()
                 if data!=():
-                    for row in data:
-                        print(row)
+                    # for row in data:
+                    #     print(row)
+                    printTabular(data,sqlHeader())
                 else:
-                    print('No data in database !!')
+                    print('\nNo data in database !!')
                 print('Total no. of rows: ',rowsAffected)
                 mycon.close()
 
@@ -148,25 +151,23 @@ while True:
         while userInp=='y':
             addStu('this is pass')  #to add a student's record
             r+=1
-            userInp=input('Do you want to enter more record? (y/n) : ')
+            userInp=input('\nDo you want to enter more record? (y/n) : ')
         else:
-            print('Total records entered: ',r)
+            print('\nTotal records entered: ',r)
 
 
     elif userInp==3:  # delete record
-        print('Know Id then enter [1] \n \
-                Know name then enter [2] \n\n\
-                **Tip: Using Id is safer, names can coincide')
         userInp='y'
         while userInp=='y':
-            id=int(input('enter id of student to be deleted: '))   # after taking id, display all data of user 
+            id=int(input('\nEnter id of student to be deleted: '))   # after taking id, display all data of user 
             data=srchById(id)
             if data==():
-                print('**TIP: \nFirst display or find id you want to delete using display function and then delete it from here.\n\n Will be waiting for you...')
+                print('\n**TIP: \nFirst display or find id you want to delete using display function and then delete it from here.\n\n Will be waiting for you...')
             else:
-                for row in data:
-                    print(row)
-                confrmation=input(f'DO u really want to delete record of {data[0][1]} ? (y/n): ').lower()
+                # for row in data:
+                #     print(row)
+                printTabular(data,sqlHeader())
+                confrmation=input(f'\nDo u really want to delete record of {data[0][1]} ? (y/n): ').lower()
                 if confrmation=='n':
                     print('Not deleting')
                     break
@@ -174,23 +175,24 @@ while True:
                     print('Deleting record...')
                     deleteRec(id)
 
-            userInp=input('Do u want to delete more records? (y/n) : ')
+            userInp=input('\nDo u want to delete more records? (y/n) : ')
 
     elif userInp==4:  # modify data
         #Also enter the last modified date in this section
         ckMore='y'
         while ckMore=='y':  #repeatng if user wants to modify another record
-            inpId=int(input('Enter id whose record u want to update: '))
+            inpId=int(input('\nEnter id whose record u want to update: '))
             data=srchById(inpId)
             if data!=():
-                for row in data:
-                    print(row)
+                # for row in data:
+                #     print(row)
+                printTabular(data,sqlHeader())
 
 
             entrAgain='y' #element to re-run this while at the same time on user's demand.
             while entrAgain=='y':  #repeting if user demand to modify something else
                 while 1:  #repeating if user enters wrong options
-                    print('WHat you would like to modify of this record.')
+                    print('\nWHat you would like to modify of this record.')
                     print("[1] To modify Name")
                     print("[2] To modify Class")
                     print("[3] To modify Email")
@@ -204,9 +206,8 @@ while True:
                     if ("0" or "1" or "2" or "3" or "4" or "5" or "99"  in str(userInp)) and (userInp>=0 and userInp<=543210 ):
                         break
                     else:
-                        print('Enter valid option!!')
-                        print()
-                        print("Options should be greater than 0 and less than 543210\n-> if you are trying to exit at the same time then exit in next turn without any another option.")
+                        print('\nEnter valid option!!')
+                        print("\nOptions should be greater than 0 and less than 543210\n-> if you are trying to exit at the same time then exit in next turn without any another option.")
 
 
                 if userInp==99:
@@ -230,14 +231,14 @@ while True:
                         elif userInp=="99":
                             programOver()
                 else:
-                    print('Enter valid options!!') 
+                    print('\nEnter valid options!!') 
 
-                entrAgain=input('DO you want to modify something else?(y/n) :').lower()
+                entrAgain=input('\nDo you want to modify something else?(y/n) :').lower()
                 if entrAgain!='y':
                     entrAgain='n'  #So that the program can terminate after this
                 
 
-            ckMore=input('Do you want to modify another record?(y/n) : ').lower()  #Asking user if he/she wants to modify another record
+            ckMore=input('/nDo you want to modify another record?(y/n) : ').lower()  #Asking user if he/she wants to modify another record
         
     elif userInp==5:  # for help module
         help()

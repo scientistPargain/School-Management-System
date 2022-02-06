@@ -1,6 +1,6 @@
 from overloading import overload
 import pymysql as sqltor
-
+from tabulate import tabulate
 
 def connectSQL(*pswrd):
     '''
@@ -183,7 +183,7 @@ def srchById(srchId:tuple):
     mycon.close()
     return data
 
-def srchByName(srchName):
+def srchByName(srchName:str):
     '''
     Returns data(tuple) of searched name
     and returns empty tuple if notihing matching found in database
@@ -196,7 +196,7 @@ def srchByName(srchName):
     mycon.close()
     return data
 
-def srchByHouse(srchHouse):
+def srchByHouse(srchHouse:str):
     '''
     Returns data(tuple) of searched house
     and returns empty tuple if notihing matching found in database
@@ -223,7 +223,7 @@ def srchByAadhar(srchAadhar):
     mycon.close()
     return data
 
-def srchByEmail(srchEmail):
+def srchByEmail(srchEmail:str):
     '''
     Returns data(tuple) of searched Email
     and returns empty tuple if notihing matching found in database
@@ -296,9 +296,6 @@ def modifyEmail(id:int):
             print('Check if there is any space in email written by you.')
             print()
             break
-        
-
-
 
 def modifyFname(id:int):
     data=srchById(id)
@@ -345,5 +342,14 @@ def programOver():  # thhings u want to do when program ends.
     print('thanks for using our software')
     exit()
 
+def printTabular(tabular_data:tuple, header:list):
+    '''
+    Prints the data beautifully in tabular format as displayed in sql
+    
+    tabular_data=> tuple data or tuple of tuples returned by sql 
+    header=> list you want as heading
+    '''
+    print()
+    print(tabulate(tabular_data,header,tablefmt='psql'))
 
 
