@@ -1,4 +1,5 @@
-from overloading import overload
+# from overloading import *
+from multipledispatch import dispatch
 import pymysql as sqltor
 from tabulate import tabulate
 
@@ -21,6 +22,26 @@ def connectSQL(*pswrd):
         # rowAffctd = cursor.execute(sqlcommand)  #returns no. of rows affected
         # data= cursor.fetchall()  #all data
         return cursor,mycon
+    except Exception as e:
+        print(e)
+
+def createDB():
+    '''
+    To create a database rgnv_school if not exists in the computer.'''
+    try:
+        print('Connecting to sql...')
+        cursor,mycon = connectSQL()
+
+        #  Table structure for table 'students'
+        
+        print('Creating database...')
+        cursor.execute('create database rgnv_school;')
+        cursor.execute('use test_school;')
+        cursor.execute("CREATE TABLE `students` (  `ID` int NOT NULL,  `Name` char(25) NOT NULL,  `Sex` char(1) NOT NULL,  `Class` int NOT NULL,  `House` char(6) DEFAULT NULL,  `Aadhar_no` varchar(12) DEFAULT NULL,  `DOB` date DEFAULT NULL,  `Email` char(30) DEFAULT NULL,  `Father_name` char(30) DEFAULT NULL,  `Mother_name` char(30) DEFAULT NULL,  `Entry_date` datetime DEFAULT CURRENT_TIMESTAMP,  `Last_modified` datetime DEFAULT CURRENT_TIMESTAMP,  PRIMARY KEY (`ID`),  CONSTRAINT `students_chk_1` CHECK ((`Sex` in (_utf8mb4'M',_utf8mb4'F',_utf8mb4'O'))),  CONSTRAINT `students_chk_2` CHECK ((`Class` between 6 and 12)),  CONSTRAINT `students_chk_3` CHECK ((`House` in (_utf8mb4'RED',_utf8mb4'BLUE',_utf8mb4'GREEN',_utf8mb4'YELLOW',_utf8mb4'')))) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;")
+        mycon.commit()
+        mycon.close()
+        print('\nCompleted !!!')
+        print('Databae test_school created successfuly.')
     except Exception as e:
         print(e)
 
@@ -48,18 +69,18 @@ def addStu(*paswrd):
     # ID = int(input('ENter I.D.: '))  # Cannot use ID as a variable inside a function bcoz according ot vs code it is a constant
     ID = int(input('ENter I.D.: '))  #not null
     Name = input('ENter name: ')  #not null
-    Sex = input('ENter sex of student: ').upper()  #not null
+    Sex = input('ENter sex of student(m/f): ').upper()  #not null
     while Sex not in('F','M','O'):
-        Sex = input('ENter sex of student: ').upper() #not null
+        Sex = input('ENter sex of student again(m/f): ').upper() #not null
     
-    Class = int(input('ENter class: '))  # not null
-    while (Class<=6 and Class >=12):
-        Class = int(input('ENter class: '))  # not null
+    Class = int(input('ENter class(6-12): '))  # not null
+    while not (Class>=6 and Class <=12):
+        Class = int(input('ENter class Again(6-12): '))  # not null
     
     HouseDict={'B':'BLUE','R':'RED','G':'GREEN','Y':'YELLOW','':''}
-    House = input("ENter house: ").upper()
+    House = input("ENter house(r,b,g,y): ").upper()
     while House not in ('R','B','G','Y',''):
-        House = input("ENter house: ").upper()
+        House = input("ENter house Again  (r,b,g,y): ").upper()
     House=HouseDict[House]
     # else:
         # if House!= '':
@@ -101,34 +122,38 @@ def addStu(*paswrd):
 
     fields,values=list(stuData.keys()), list(stuData.values())  #individual  lists of fields and values entered by user
 
-    print('Do you want to enter this record')
-    for x, y in zip(fields,values):
-        print('{} {}'.format(x, y))
-
     
-    # FINAL RECORD INSERTION TO DATABASE
+    # for x, y in zip(fields,values):
+    #     print('{} {}'.format(x, y))
+    printTabular(values,fields)
 
-    # finalSqlCmn = "INSERT INTO STUDENTS(var1,var2,var3,...varN) VALUES(val1,val2,val3,...valN);"   #var1,var2 must be without inverted commas
+    finlInp=input('Do you want to enter this record?(y/n)')
+    if finlInp=='y':
+        # FINAL RECORD INSERTION TO DATABASE
 
-    adSqlCmnd= f"INSERT INTO STUDENTS("
-    for i in fields:
-        adSqlCmnd+=i+','
-    finalSqlCmnd = adSqlCmnd[:-1] + f") VALUES{tuple(values)};"  #removing last comma(,) of adSqlCmnd string which it get in for loop
-    print(finalSqlCmnd)
-    try:
-        cursor,mycon = connectSQL(adSqlCmnd)
-        rowsEntrd=cursor.execute(finalSqlCmnd)
-        mycon.commit()
-        print('Entered ',rowsEntrd,'rows')
-    except Exception as e:
-        print(e)
-        addStu('pass')
-    finally:
-        mycon.close()
+        # finalSqlCmn = "INSERT INTO STUDENTS(var1,var2,var3,...varN) VALUES(val1,val2,val3,...valN);"   #var1,var2 must be without inverted commas
+
+        adSqlCmnd= f"INSERT INTO STUDENTS("
+        for i in fields:
+            adSqlCmnd+=i+','
+        finalSqlCmnd = adSqlCmnd[:-1] + f") VALUES{tuple(values)};"  #removing last comma(,) of adSqlCmnd string which it get in for loop
+        print(finalSqlCmnd)
+        try:
+            cursor,mycon = connectSQL(adSqlCmnd)
+            rowsEntrd=cursor.execute(finalSqlCmnd)
+            mycon.commit()
+            print('Entered ',rowsEntrd,'rows')
+        except Exception as e:
+            print(e)
+            addStu('pass')
+        finally:
+            mycon.close()
+    else:
+        print('Not entering record.')
 
 # Deletion functions
 #Learn use of overload decorator
-@overload(int)
+@dispatch(int)
 def deleteRec(id:int ):
     '''
     To delete data of any student 
@@ -140,7 +165,7 @@ def deleteRec(id:int ):
     print(f'{affctedRow} record deleted for id {id}')
     mycon.close()
 
-@overload(tuple)
+@dispatch(tuple)
 def deleteRec(id:tuple):
     '''Delete every id in that tuple that found in db'''
     #If entering tuple, enter more than 1 element
@@ -152,7 +177,7 @@ def deleteRec(id:tuple):
     mycon.close()
 
 # Search Functions
-@overload(int)
+@dispatch(int)
 def srchById(srchId:int):
     '''
     Returns data(tuple) of searched id
@@ -167,7 +192,7 @@ def srchById(srchId:int):
     mycon.close()
     return data
 
-@overload(tuple)
+@dispatch(tuple)
 def srchById(srchId:tuple):
     '''
     Returns data(tuple) of searched ids

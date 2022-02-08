@@ -42,22 +42,35 @@ Finally, we can verify whether the above operation is successful or not by using
 copied from : https://www.javatpoint.com/mysql-copy-database
 
 '''
+# import time
+# import os
+
+# # install requirements.txt from this file 
+# print('\nInstalling requrements, please wait and do not quit...')
+# print()
+# try:
+#     os.system('pip install -r requirements.txt')
+#     print('\nSuccesfully installed all requirements.')
+# except Exception as e:
+#     print(e)
+#     print('\nTry installing manually, or run setup.py again.')
 
 from managementFunctions import connectSQL
-import os
-import time
+try:
+    print('Connecting to sql...')
+    cursor,mycon = connectSQL()
+
+    #  Table structure for table 'students'
+    
+    print('Creating database...')
+    cursor.execute('create database rgnv_school;')
+    cursor.execute('use test_school;')
+    cursor.execute("CREATE TABLE `students` (  `ID` int NOT NULL,  `Name` char(25) NOT NULL,  `Sex` char(1) NOT NULL,  `Class` int NOT NULL,  `House` char(6) DEFAULT NULL,  `Aadhar_no` varchar(12) DEFAULT NULL,  `DOB` date DEFAULT NULL,  `Email` char(30) DEFAULT NULL,  `Father_name` char(30) DEFAULT NULL,  `Mother_name` char(30) DEFAULT NULL,  `Entry_date` datetime DEFAULT CURRENT_TIMESTAMP,  `Last_modified` datetime DEFAULT CURRENT_TIMESTAMP,  PRIMARY KEY (`ID`),  CONSTRAINT `students_chk_1` CHECK ((`Sex` in (_utf8mb4'M',_utf8mb4'F',_utf8mb4'O'))),  CONSTRAINT `students_chk_2` CHECK ((`Class` between 6 and 12)),  CONSTRAINT `students_chk_3` CHECK ((`House` in (_utf8mb4'RED',_utf8mb4'BLUE',_utf8mb4'GREEN',_utf8mb4'YELLOW',_utf8mb4'')))) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;")
+    mycon.commit()
+    mycon.close()
+    print('\nCompleted !!!')
+    print('Databae test_school created successfuly.')
+except Exception as e:
+    print(e)
 
 
-cursor,mycon = connectSQL()
-
-# os.system("mysql -u root -p test_school < C:\\Users\\microsoft\\Desktop\\School Management System\\rgnv_school.sql")
-
-#  Table structure for table 'students'
-
-cursor.execute('create database test_school;')
-cursor.execute('use test_school;')
-cursor.execute("CREATE TABLE `students` (  `ID` int NOT NULL,  `Name` char(25) NOT NULL,  `Sex` char(1) NOT NULL,  `Class` int NOT NULL,  `House` char(6) DEFAULT NULL,  `Aadhar_no` varchar(12) DEFAULT NULL,  `DOB` date DEFAULT NULL,  `Email` char(30) DEFAULT NULL,  `Father_name` char(30) DEFAULT NULL,  `Mother_name` char(30) DEFAULT NULL,  `Entry_date` datetime DEFAULT CURRENT_TIMESTAMP,  `Last_modified` datetime DEFAULT CURRENT_TIMESTAMP,  PRIMARY KEY (`ID`),  CONSTRAINT `students_chk_1` CHECK ((`Sex` in (_utf8mb4'M',_utf8mb4'F',_utf8mb4'O'))),  CONSTRAINT `students_chk_2` CHECK ((`Class` between 6 and 12)),  CONSTRAINT `students_chk_3` CHECK ((`House` in (_utf8mb4'RED',_utf8mb4'BLUE',_utf8mb4'GREEN',_utf8mb4'YELLOW',_utf8mb4'')))) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;")
-mycon.commit()
-mycon.close()
-
-# install requirements.txt from this file 
