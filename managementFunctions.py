@@ -15,7 +15,8 @@ def connectSQL(*pswrd):
     
     '''
     try:
-        mycon= sqltor.connect(host='localhost',user = 'root',password='royal@123',database='rgnv_school' )
+        passw=input("enter the password")
+        mycon= sqltor.connect(host='localhost',user = 'root',password=passw,database='rgnv_school' )
 
 
         cursor = mycon.cursor()
